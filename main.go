@@ -10,7 +10,9 @@ import (
 
 func main() {
 	if err := cmd.Execute(); err != nil {
-		fmt.Fprintf(os.Stderr, "error: %v\n", err)
+		// Use exit code 2 for usage errors vs 1 for general errors,
+		// but keep it simple here since cmd.Execute handles most cases.
+		fmt.Fprintf(os.Stderr, "chezmoi: %v\n", err)
 		os.Exit(1)
 	}
 }
