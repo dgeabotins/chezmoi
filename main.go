@@ -2,6 +2,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"os"
 
@@ -10,9 +11,12 @@ import (
 
 func main() {
 	if err := cmd.Execute(); err != nil {
-		// Use exit code 2 for usage errors vs 1 for general errors,
-		// but keep it simple here since cmd.Execute handles most cases.
 		fmt.Fprintf(os.Stderr, "chezmoi: %v\n", err)
+		// Exit with code 2 for usage errors, 1 for all other errors.
+		var usageErr *cmd.UsageError
+		if errors.As(err, &usageErr) {
+			os.Exit(2)
+		}
 		os.Exit(1)
 	}
 }
